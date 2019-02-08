@@ -77,14 +77,16 @@ class DescribeFontFiles(object):
     @pytest.fixture(params=[
         ('darwin', ['a', 'b']),
         ('win32',  ['c', 'd']),
+        ('linux',  ['e', 'f']),
     ])
     def font_dirs_fixture(
             self, request, _os_x_font_directories_,
-            _windows_font_directories_):
+            _windows_font_directories_, _linux_font_directories_):
         platform, expected_dirs = request.param
         dirs_meth_mock = {
             'darwin': _os_x_font_directories_,
             'win32':  _windows_font_directories_,
+            'linux': _linux_font_directories_,
         }[platform]
         sys_ = var_mock(request, 'pptx.text.fonts.sys')
         sys_.platform = platform
@@ -127,6 +129,13 @@ class DescribeFontFiles(object):
             '/System/Library/Fonts',
             '/Users/fbar/Library/Fonts',
             '/Users/fbar/.fonts',
+        ]
+
+    @pytest.fixture
+    def linux_dirs_fixture(self, request):
+        return [
+            '/usr/share/fonts',
+            '/usr/share/fonts/truetype',
         ]
 
     @pytest.fixture
